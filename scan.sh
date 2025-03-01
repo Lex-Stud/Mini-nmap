@@ -80,7 +80,7 @@ else
                     fi
                     # Încearcă să obții adresa MAC
                     mac=$(arp -n | grep "$networkPrefix.$i" | awk '{print $3}')
-                    if [ ! -z "$mac" ]; then
+                    if [ ! -z "$mac$mac" ]; then
                         echo "  MAC: $mac"
                     else
                         echo "  MAC: N/A"
@@ -93,10 +93,24 @@ else
             fi
         done
         wait # Așteaptă terminarea tuturor proceselor
+
+    elif [ "$command" == "-p" ]; then
+        ip=$2
+        port=$3
+        if [ -z "$ip" ] || [ -z "$port" ]; then
+            echo "Trebuie să specificați o adresă IP și un port (ex: 192.168.1.1 80)"
+            exit 1
+        fi
+        
+        # Scanează portul specificat
+        (echo > /dev/tcp/$ip/$port) >/dev/null 2>&1 && echo "Port $port deschis pe $ip" || echo "Port $port închis pe $ip"
+
     elif [ "$command" == "-h" ]; then
         echo "Utilizare: $0 [opțiune]"
         echo "Opțiuni:"
         echo "  -l    Scanează rețeaua locală pentru dispozitive active"
+        echo "  -s    Scanează o rețea specificată pentru dispozitive active"
+        echo "  -p    Scanează un port specific pe o adresă IP (ex: -p 192.168.1.1 80)"
         echo "  -h    Afișează acest mesaj de ajutor"
     else
         echo "Opțiune necunoscută: $command"
