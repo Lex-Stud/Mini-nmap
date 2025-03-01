@@ -29,18 +29,23 @@ else
         # Scanează dispozitivele active
         for i in $(seq 1 254); do  # Scanează toate adresele posibile în subnet
             (
-                ping -c 1 -W 1 "$networkPrefix.$i" > /dev/null 2>&1  # Timeout de 1 secundă
+                echo "Pinging $networkPrefix.$i"  # Debug
+                ping -c 1 -W 2 "$networkPrefix.$i" > /dev/null 2>&1  # Timeout de 2 secunde
                 if [ $? -eq 0 ]; then
                     echo "Dispozitiv găsit: $networkPrefix.$i"
                     # Încearcă să obții numele host-ului
                     hostname=$(nslookup "$networkPrefix.$i" 2>/dev/null | grep "name =" | awk '{print $4}' | sed 's/\.$//')
                     if [ ! -z "$hostname" ]; then
                         echo "  Hostname: $hostname"
+                    else
+                        echo "  Hostname: N/A"
                     fi
                     # Încearcă să obții adresa MAC
                     mac=$(arp -n | grep "$networkPrefix.$i" | awk '{print $3}')
                     if [ ! -z "$mac" ]; then
                         echo "  MAC: $mac"
+                    else
+                        echo "  MAC: N/A"
                     fi
                 fi
             ) &
