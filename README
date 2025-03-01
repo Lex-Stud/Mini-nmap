@@ -1,0 +1,31 @@
+# Script de scanare a Rețelei
+
+Acest script îți permite să scanezi o rețea sau un dispozitiv specific în rețea pentru a găsi dispozitive active și porturi deschise. Suportă mai multe opțiuni pentru diferite tipuri de scanări.
+
+## Utilizare
+
+./network_scanner.sh [opțiune]
+
+## Opțiuni
+
+- -l: Scanează rețeaua locală pentru dispozitive active.
+- -s <network> : Scanează o rețea specificată pentru dispozitive active. Exemplu: `192.168.1.0/24`
+- -p <ip> <port> : Scanează un port specific pe o adresă IP. Exemplu: `-p 192.168.1.1 80`
+- -h: Afișează mesajul de ajutor.
+
+
+### Opțiunea `-l`
+
+Scanează rețeaua locală pentru dispozitive active. Obține gateway-ul implicit, interfața de rețea, adresa IP locală și masca de subrețea pentru a identifica rețeaua locală. Apoi ping fiecare adresă IP în subrețea pentru a găsi dispozitive active și încearcă să obțină numele host-ului și adresa MAC pentru fiecare dispozitiv activ.
+
+### Opțiunea `-s <network>`
+
+Scanează o rețea specificată pentru dispozitive active. Rețeaua trebuie să fie furnizată în notarea CIDR, cum ar fi `192.168.1.0/24`. Scriptul ping fiecare adresă IP din rețeaua specificată pentru a găsi dispozitive active și încearcă să obțină numele host-ului și adresa MAC pentru fiecare dispozitiv activ.
+
+### Opțiunea `-p <ip> <port>`
+
+Scanează un port specific pe o adresă IP dată pentru a verifica dacă este deschis. Scriptul încearcă să stabilească o conexiune TCP la portul specificat și raportează dacă portul este deschis sau închis.
+
+### Opțiunea `-h`
+
+Afișează mesajul de ajutor cu o descriere a opțiunilor disponibile și a modului de utilizare.
